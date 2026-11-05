@@ -1,9 +1,9 @@
 
-# Arman — AI-Powered Enterprise Knowledge Management
+# AI-Powered Enterprise Knowledge Management
 
 An AI-powered knowledge management MVP designed to help organizations retrieve information from internal documents and receive reliable, source-grounded answers.
 
-Arman uses an Agentic Retrieval-Augmented Generation (RAG) architecture that combines document retrieval, evidence evaluation, and LLM-based response generation.
+uses an Agentic Retrieval-Augmented Generation (RAG) architecture that combines document retrieval, evidence evaluation, and LLM-based response generation.
 
 > «Project Status: MVP / Experimental
 > The system has been evaluated in laboratory settings but has not yet been deployed or tested with real organizational users.»
@@ -26,7 +26,7 @@ Arman uses an Agentic Retrieval-Augmented Generation (RAG) architecture that com
 
 Organizational knowledge is often scattered across documents, reports, and internal resources. Finding reliable information can be time-consuming and may create dependency on domain experts.
 
-Arman was developed to explore how an AI-powered knowledge management system could help employees access organizational knowledge more efficiently through natural language while keeping answers grounded in source documents.
+This product was developed to explore how an AI-powered knowledge management system could help employees access organizational knowledge more efficiently through natural language while keeping answers grounded in source documents.
 
 ---
 
@@ -218,6 +218,6 @@ Potential areas for further development include:
 
 ## Project Context
 
-Arman was developed as an MVP during an innovation bootcamp to explore the potential of AI-powered enterprise knowledge management.
+This product was developed as an MVP during an innovation bootcamp to explore the potential of AI-powered enterprise knowledge management.
 
 The project demonstrated the technical feasibility of the proposed approach through laboratory evaluation. Further development would require customer discovery and real-world validation to better understand organizational needs and evaluate product-market fit.
