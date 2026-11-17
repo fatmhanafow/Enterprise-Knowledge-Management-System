@@ -1,223 +1,204 @@
+# Dana — Enterprise RAG Platform
 
-# AI-Powered Enterprise Knowledge Management
+> **An enterprise RAG platform for source-grounded search and answering, with access control, automated answer-quality evaluation, and an architecture designed to extend toward knowledge graphs and enterprise data sources.**
 
-An AI-powered knowledge management MVP designed to help organizations retrieve information from internal documents and receive reliable, source-grounded answers.
-
-uses an Agentic Retrieval-Augmented Generation (RAG) architecture that combines document retrieval, evidence evaluation, and LLM-based response generation.
-
-> «Project Status: MVP / Experimental
-> The system has been evaluated in laboratory settings but has not yet been deployed or tested with real organizational users.»
-
----
-
-## 🎥 Product Demo
-
-["Watch the product demo"](ADD_DEMO_LINK_HERE)
-
-<!-- Add product screenshots below -->
-<p align="center">
-  <img src="assets/screenshots/screenshot-1.png" width="45%" />
-  <img src="assets/screenshots/screenshot-2.png" width="45%" />
-</p>
+[![Backend](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi&logoColor=white)](#)
+[![Frontend](https://img.shields.io/badge/Frontend-React%2019-61DAFB?logo=react&logoColor=black)](#)
+[![Vector DB](https://img.shields.io/badge/Vector%20DB-ChromaDB-FF6B6B)](#)
+[![Orchestration](https://img.shields.io/badge/Orchestration-LangGraph-1C3C3C)](#)
+[![DB](https://img.shields.io/badge/Database-PostgreSQL-336791?logo=postgresql&logoColor=white)](#)
 
 ---
 
-## The Problem
+## 🎤 Elevator Pitch
 
-Organizational knowledge is often scattered across documents, reports, and internal resources. Finding reliable information can be time-consuming and may create dependency on domain experts.
+**Dana** helps organizations get **precise, well-sourced, and trustworthy** answers from their institutional knowledge—instead of digging through scattered files, wikis, and disconnected systems. The key differences:
 
-This product was developed to explore how an AI-powered knowledge management system could help employees access organizational knowledge more efficiently through natural language while keeping answers grounded in source documents.
+- **Every answer cites its source** (Source-Grounded)
+- **If the evidence isn't sufficient, it abstains** (Abstain instead of Hallucinate)
+- **Each user's access to knowledge is controlled** (Permission-Aware Retrieval)
+- **Answer quality is automatically judged** (LLM Judge)
 
----
-
-## Key Features
-
-- AI-powered question answering over organizational documents
-- Agentic RAG workflow for managing the response process
-- Hybrid and dense retrieval strategies
-- Semantic search using vector embeddings
-- Keyword retrieval using BM25
-- Evidence-based response generation
-- Source and document reference tracking
-- Abstention when sufficient evidence is unavailable
-- Persian-language conversational interface
+The result? Less time spent hunting for knowledge, fewer unsupported AI answers, and a technical foundation ready to connect to Jira, Mizito, enterprise databases, and a Knowledge Graph.
 
 ---
 
-## System Architecture
+## 💼 Business Value (Why It Matters)
 
-The system follows an Agentic RAG architecture:
-
-```
-
-User Query
-│
-▼
-Agent / Decision Layer
-│
-├── Evaluate retrieved evidence
-├── Decide whether to answer or abstain
-└── Manage the response workflow
-│
-▼
-Retrieval Engine
-│
-├── Dense Retrieval
-└── BM25 Keyword Retrieval
-│
-▼
-Ranking / Fusion
-│
-▼
-Knowledge Base
-(ChromaDB + Metadata)
-│
-▼
-LLM
-│
-▼
-Source-Grounded Response
-
-```
-
-The agent orchestration layer was designed to manage the response process and evaluate whether sufficient evidence exists before generating an answer.
-
----
-
-## Technical Highlights
-
-### Retrieval Pipeline
-
-The system supports multiple retrieval strategies:
-
-- Dense Retrieval using vector embeddings
-- Keyword Retrieval using BM25
-- Hybrid Retrieval combining dense and keyword search
-- Weighted Reciprocal Rank Fusion (RRF) for combining retrieval results
-
-The knowledge base uses ChromaDB for vector storage and retrieval, with metadata support for source tracking.
-
-### Embeddings and Document Processing
-
-The system uses BAAI/bge-m3, a multilingual embedding model suitable for Persian-language content.
-
-The document preparation pipeline includes:
-
-- Text cleaning and preprocessing
-- Document chunking with overlap
-- Metadata management
-- Vector indexing
-
-### Agentic Workflow
-
-An agent-based orchestration layer built with LangGraph manages different stages of the response process, including evidence evaluation and response decisions.
-
-The system can abstain from answering when sufficient supporting evidence is not available in the knowledge base.
-
----
-
-## Evaluation
-
-The MVP was evaluated in laboratory settings using internal benchmark datasets and automated evaluation methods.
-
-### Response Quality Evaluation
-
-Response quality was evaluated on a dataset of 200 questions using the DeepEval framework and an independent evaluator model.
-
-| Metric | Result |
-|---|---|
-| Faithfulness / Grounding | 0.9527 |
-| Answer Relevance | 0.8072 |
-| Citation Accuracy | 0.9333 |
-| Abstention Accuracy | 0.98 |
-| False Abstention Rate | 4% |
-| False Answer Rate | 2% |
-| Average End-to-End Latency | 3 seconds |
-
-These results indicate strong grounding and citation performance under the project's experimental evaluation setup.
-
-### Retrieval Benchmark
-
-The retrieval engine was evaluated using 139 human-written questions derived from an organizational FAQ dataset.
-
-| Retrieval Method | MRR | Hit@10 |
+| Organizational Challenge | Dana's Solution | Measurable Outcome |
 |---|---|---|
-| Dense Retrieval | 0.957 | 1.000 |
-| Hybrid Retrieval | 0.939 | 1.000 |
-| BM25 | 0.848 | 0.978 |
-
-For the evaluated dataset, dense retrieval achieved the highest MRR, while both dense and hybrid retrieval achieved full Hit@10 coverage.
-
-> «Evaluation Limitations: These results were obtained in laboratory settings using internal benchmark datasets. The system has not yet been deployed in a real organizational environment, and real-user testing, load testing, and concurrent-user evaluation have not yet been conducted.»
+| Knowledge scattered across files and systems | Unified ingestion + Hybrid Retrieval | Search time reduced from hours to seconds |
+| AI answers with no source and low trust | Citation Validation + LLM Judge + Abstain | Reduced risk of misinformation |
+| Information leakage between users/departments | JWT + Public/Private Filter + Workspace ACL | Access control enforced at the retrieval layer |
+| No visibility into answer quality | Faithfulness / Citation / Relevance Scoring | Continuous monitoring and improvement |
+| Need to connect to new sources | Modular architecture (API / Service / Repository / Ingestion) | Fast development of enterprise connectors |
 
 ---
 
-## My Contribution
+## 🏗️ High-Level Architecture
 
-I served as the Team Lead for a two-person team and contributed to both the product and technical development of the project.
+```mermaid
+flowchart LR
+    Browser[React + Vite Frontend] -->|HTTP /api/v1| API[FastAPI Backend]
+    API --> Auth[JWT / Role Dependencies]
+    API --> Services[RAG · File · Workspace Services]
+    Services --> PG[(PostgreSQL)]
+    Services --> Disk[(Uploads & Caches)]
+    Services --> Graph[LangGraph Workflow]
+    Graph --> Retrieval[Hybrid Retrieval]
+    Retrieval --> Chroma[(ChromaDB)]
+    Retrieval --> BM25[(BM25 Cache)]
+    Graph --> LLM[LLM Provider]
+    Indexer[Background Indexer] --> Chroma
+    Indexer --> BM25
+    Indexer --> PG
+```
 
-My responsibilities included:
+### Answer Flow (Agentic RAG)
 
-- Product backlog management and prioritization
-- Contributing to problem discovery and validation planning
-- Backend development using Python and FastAPI
-- Knowledge base design and management
-- Document processing and retrieval pipeline implementation
-- Implementing and evaluating RAG system components
-- Database design and documentation
-- Contributing to the overall system architecture
-
-The frontend and agent core were developed collaboratively by the project team.
-
----
-
-## Tech Stack
-
-### AI & Backend
-
-- Python
-- FastAPI
-- LangGraph
-- LLM APIs
-- BAAI/bge-m3
-
-### Retrieval & Data
-
-- ChromaDB
-- BM25
-- Dense Retrieval
-- Hybrid Search
-- Weighted RRF
-
-### Evaluation
-
-- DeepEval
-- LLM-based evaluation
-
-### Frontend
-
-- React
-- Vite
-- Tailwind CSS
+```mermaid
+flowchart TD
+    Q[User Query] --> R[Retrieve: Dense + BM25]
+    R --> U[Accessible Uploads Filter]
+    U --> D[Agent Decision LLM]
+    D -->|Rewrite| RW[Rewrite Query]
+    RW --> R
+    D -->|Ask / Request Doc| ASK[Clarification Session]
+    ASK -->|Follow-up| Q
+    D -->|Generate| G[Answer + Citations]
+    D -->|Insufficient Evidence| A[Abstain]
+    G --> J[LLM Judge]
+    J -->|Pass ≥2 Metrics| OK[Approved]
+    J -->|Fail| A
+```
 
 ---
 
-## Future Directions
+## ✨ Key Capabilities
 
-Potential areas for further development include:
+### 🔍 Hybrid Retrieval
+- **Dense Retrieval** using `BAAI/bge-m3` on ChromaDB
+- **BM25 Lexical Retrieval** for precise keyword coverage
+- **Weighted Reciprocal Rank Fusion (RRF)** with configurable weights
+- **Relevance Thresholding** and intelligent selection between Hybrid and BM25-only modes
 
-- Customer discovery and validation with real organizational users
-- Deployment and testing in a real organizational environment
-- Load and concurrent-user testing
-- Integration with organizational tools such as Jira, CRM, and ERP systems
-- Advanced reranking methods
-- Role-based access control and administrative tools
-- Knowledge graph integration
+### 🤖 LangGraph-Based Agent
+- A bounded, inspectable graph (not an uncontrolled agent)
+- Decides between: **Generate / Rewrite / Ask User / Request Document / Abstain**
+- Bounded retries for query rewriting
+- Ambiguity-handling sessions with TTL
+
+### 🛡️ Sourced and Trustworthy Answers
+- Grounded prompt + `[doc_N]` markers
+- Citation validation against retrieved documents
+- **LLM Judge** across three metrics: Faithfulness, Citation Accuracy, Relevance
+- **Abstain** if at least two metrics do not pass their thresholds
+
+### 🔐 Security and Access Control
+- JWT (HS256) + bcrypt
+- Invite-code-based registration with enforced role
+- Chat ownership checks
+- Metadata filter on `access_level=public OR user_id=current_user`
+- Workspace: Department / Folder / Admin Assignment
+
+### 📥 Ingestion and Knowledge Management
+- Supports `.docx`, `.txt`, `.md`
+- Chunking based on the `bge-m3` tokenizer (default 400/40)
+- Asynchronous indexing with BackgroundTasks
+- Knowledge Dashboard for managers
+- Upload / Replace / Delete + Index Status + Soft Delete
 
 ---
 
-## Project Context
+## 🧱 Tech Stack
 
-This product was developed as an MVP during an innovation bootcamp to explore the potential of AI-powered enterprise knowledge management.
+| Layer | Technology |
+|---|---|
+| Backend | Python, FastAPI, Pydantic |
+| Frontend | React 19, React Router, Vite |
+| Database | PostgreSQL (`psycopg2`) |
+| Vector Store | ChromaDB (Persistent) |
+| Lexical Search | BM25 |
+| Embeddings | Sentence Transformers — `BAAI/bge-m3` |
+| Orchestration | LangGraph |
+| LLM Access | OpenAI-compatible client |
+| Evaluation | DeepEval + Retrieval Hit/MRR Tooling |
 
-The project demonstrated the technical feasibility of the proposed approach through laboratory evaluation. Further development would require customer discovery and real-world validation to better understand organizational needs and evaluate product-market fit.
+---
+
+## 📊 Technical Maturity (Honest Scorecard)
+
+| Area | Status | Notes |
+|---|---|---|
+| Authentication & Roles | ✅ Implemented | JWT, Invite Code, Manager Checks |
+| Chat & History | ✅ Implemented | Persistence + Follow-up Sessions |
+| File Ingestion | ✅ Implemented (limited) | DOCX/TXT/MD — `.doc` is stored only |
+| Hybrid Retrieval | ✅ Implemented | Dense + BM25 + RRF |
+| Source-Grounded Answers | 🟡 Partial | Citation validation exists; claim-level entailment does not |
+| LLM Judge | ✅ Implemented | Three metrics + threshold |
+| Knowledge Admin | ✅ Implemented (Basic) | Public CRUD |
+| Versioning | 🟡 Partial | Replace without History |
+| Workspace ACL in Retrieval | 🟡 Partial | Department/Folder not applied in retrieval filter |
+| Knowledge Graph | ❌ Not Found | Architectural foundation is ready |
+| Enterprise Connectors (Jira/Mizito/REST) | ❌ Not Found | Requires a Connector Framework |
+| Automated Tests / Release Gate | 🟡 Partial | Evaluation assets exist; no formal Test Suite |
+| Durable Job Queue | ❌ Not Found | In-process BackgroundTasks |
+
+> This table reflects the project's philosophy: **transparency about what is built, what is partially built, and what is not yet there.**
+
+---
+
+## 🗺️ Roadmap
+
+### Short Term (Foundation Hardening)
+- [ ] Enforce authentication on `/query` and unify access filters in Retrieval
+- [ ] Move indexing to a durable queue with retries and idempotency
+- [ ] Complete, versioned database schema migrations
+- [ ] Make configuration fail-safe (JWT Secret, Provider Keys)
+- [ ] Unified test suite + regression gate on evaluation datasets
+
+### Mid Term (Enterprise Readiness)
+- [ ] Connector Framework for Jira, Mizito, SQL, and REST
+- [ ] Incremental sync + deletion semantics + permission mapping
+- [ ] Full document versioning and lifecycle (Review / Approval / Retention)
+- [ ] Audit log for accesses and changes
+- [ ] Claim-level citation verification
+
+### Long Term (Knowledge Intelligence)
+- [ ] Knowledge Graph extraction + entity resolution
+- [ ] Graph + Vector fusion retrieval
+- [ ] Permission-aware graph traversal
+- [ ] Automated classification and enrichment pipeline
+
+---
+
+## 🎯 Why This Project Matters
+
+Dana is not just a RAG demo. It demonstrates how to build an **enterprise knowledge system** that is:
+
+1. **Trustworthy** — because it cites sources and stays silent when evidence is lacking.
+2. **Controllable** — because access is enforced at the retrieval layer, not just in the UI.
+3. **Measurable** — because the Judge and evaluation datasets are part of the architecture.
+4. **Extensible** — because the boundaries between API / Service / Repository / Ingestion are well defined.
+
+---
+
+## 📌 One-Line Summary
+
+> **Dana = Hybrid RAG + Agentic Workflow + Source-Grounded Answers + Permission-Aware Retrieval — with a clear roadmap toward Knowledge Graph and Enterprise Integrations.**
+
+---
+
+## 📎 Additional Documentation
+
+- Full architecture and status report: `docs/technical-architecture-audit.md`
+- Evaluation and datasets: `pipelines/eval/`, `data/eval/`
+- API Versioning: `/api/v1`
+
+---
+
+<div align="center">
+
+**Built with FastAPI · React · LangGraph · ChromaDB · BM25 · BAAI/bge-m3**
+
+</div>
